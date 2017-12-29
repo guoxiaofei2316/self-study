@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="leave" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="542,63,92,52" name="start1">
+   </start>
+   <end g="554,559,48,48" name="end1"/>
+   <decision g="561,454,92,52" name="exclusive1">
+      <transition g="-36,-18" name="结束" to="end1"/>
+   </decision>
+   <task name="task1" g="511,174,92,52"/>
+   <task name="task2" g="529,333,92,52"/>
+   <task name="task3" g="787,485,92,52"/>
+</process>

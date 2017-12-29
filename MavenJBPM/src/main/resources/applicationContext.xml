@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="   
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+	http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.1.xsd
+    http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	http://www.springframework.org/schema/data/jpa 
+	http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd">
+	<context:component-scan base-package="test.jbpm.service;test.jbpm.dao" />
+	<!-- 定义数据源 -->
+	<context:property-placeholder location="classpath:config/applicationConfig.properties"/>
+	<bean id="hibernateData" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName">
+			 <value>${jdbc.driver}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc.url}</value>
+		</property>
+		<property name="username">
+			<value>root</value>
+		</property>
+		<property name="password">
+			<value>root</value>
+		</property>
+		<property name="maxActive">
+			<value>255</value>
+		</property>
+		<property name="maxIdle">
+			<value>2</value>
+		</property>
+		<property name="maxWait">
+			<value>120000</value>
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="hibernateData"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>  <!--指定数据库方言-->
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop> <!--hibernate根据实体自动生成数据库表-->
+				<!-- <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop> -->
+			</props>
+		</property>
+		<!-- hibernate映射文件的位置 -->
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:mapping</value>
+			</list>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>jbpm.repository.hbm.xml</value>  
+                <value>jbpm.execution.hbm.xml</value>  
+                <value>jbpm.history.hbm.xml</value>  
+                <value>jbpm.task.hbm.xml</value>  
+                <value>jbpm.identity.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置事物管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 配置事物的传播特性 (事物通知) -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:advisor pointcut="execution(* test.jbpm..*.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	
+	<!-- jbpm -->
+	<bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper">
+		<property name="jbpmCfg" value="jbpm.cfg.xml"></property>
+	</bean>
+	
+	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+</beans>
