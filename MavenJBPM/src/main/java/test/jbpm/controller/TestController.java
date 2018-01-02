@@ -20,9 +20,7 @@ public class TestController {
 	@RequestMapping(value="/find")
 	public void find(HttpServletRequest request, HttpServletResponse response){
 		
-		Person findPerson = personService.findPerson(1);
-		
-		String s ="";
+		personService.start();		
 		
 	}
 	
