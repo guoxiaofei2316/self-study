@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE hibernate-mapping PUBLIC  
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'  
+        'http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd'>  
+
+<hibernate-mapping>
+    <!-- ### USER ########################################################### -->
+    <class name="test.jbpm.api.MesUser" table="JBPM4_CUSTOMIZE_USER">
+
+        <id name="dbid" column="DBID_">
+            <generator class="assigned" />
+        </id>
+
+        <version name="dbversion" column="DBVERSION_" />
+
+        <property name="id" column="USERID_" /> <!-- 登陆ID -->
+
+        <property name="userNo" column="USERNO_" /> <!-- 员工工号 -->
+
+        <property name="userName" column="USERNAME_" /> <!-- 姓名 -->
+
+        <property name="userSex" column="USERSEX_" /> <!-- 性别 -->
+
+        <property name="userPassword" column="USERPASSWORD_" /> <!-- 密码 -->
+
+        <property name="userType" column="USERTYPE_" /> <!-- 类型 -->
+
+        <property name="userMail" column="USERMAIL_" /> <!-- 电子邮件 -->
+
+        <property name="signaturePic" column="SIGNATUREPIC_" /> <!-- 电子签名 -->
+
+        <property name="remarks" column="REMARKS_" /> <!-- 备注 -->
+
+    </class>
+    
+    <!-- ### MEMBERSHIP ##################################################### -->
+    <class name="test.jbpm.api.MesGroupMembership" table="JBPM4_CUSTOMIZE_MEMBERSHIP">
+
+        <id name="dbid" column="DBID_">
+            <generator class="assigned" />
+        </id>
+
+        <version name="dbversion" column="DBVERSION_" />
+
+        <many-to-one name="user" column="USER_"
+            class="test.jbpm.api.MesUser" foreign-key="FK_MEM_USER"
+            index="IDX_MEM_USER" />
+
+        <many-to-one name="group" column="GROUP_"
+            class="test.jbpm.api.MesGroup" foreign-key="FK_MEM_GROUP"
+            index="IDX_MEM_GROUP" />
+
+        <property name="role" column="NAME_" />
+
+    </class>
+
+    <!-- ### GROUP ########################################################### -->
+    <class name="test.jbpm.api.MesGroup" table="JBPM4_CUSTOMIZE_GROUP">
+
+        <id name="dbid" column="DBID_">
+            <generator class="assigned" />
+        </id>
+
+        <version name="dbversion" column="DBVERSION_" />
+
+        <property name="id" column="ID_" />
+
+        <property name="groupName" column="NAME_" />
+
+        <property name="groupType" column="TYPE_" />
+
+        <property name="remarks" column="REMARKS_" />
+
+        <many-to-one name="parentGroup" column="PARENT_"
+            class="test.jbpm.api.MesGroup" foreign-key="FK_GROUP_PARENT"
+            index="IDX_GROUP_PARENT" />
+    </class>
+
+</hibernate-mapping>
