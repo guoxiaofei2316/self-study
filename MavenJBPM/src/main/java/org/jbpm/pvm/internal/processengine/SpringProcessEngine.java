@@ -57,7 +57,7 @@ public class SpringProcessEngine extends ProcessEngineImpl implements Environmen
 				springCfg = "applicationContext.xml";
 			}
 			applicationContext = new ClassPathXmlApplicationContext(springCfg);
-			springProcessEngine = (SpringProcessEngine) applicationContext.getBean("processEngine");
+			springProcessEngine = (SpringProcessEngine) applicationContext.getBean("springProcessEngine");
 		}
 
 		return springProcessEngine;

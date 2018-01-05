@@ -71,9 +71,9 @@
 			<version>1.8.4</version>
 		</dependency>
 		<dependency>
-  			<groupId>javax.mail</groupId>
-  			<artifactId>mailapi</artifactId>
-  			<version>1.4.3</version>
+			<groupId>javax.mail</groupId>
+			<artifactId>mailapi</artifactId>
+			<version>1.4.3</version>
 		</dependency>
 
 		<!-- spring web + spring MVC -->
@@ -237,6 +237,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<!-- 与tomcat冲突 -->
+		<!-- <dependency> <groupId>org.glassfish</groupId> <artifactId>javax.el</artifactId> 
+			<version>3.0.0</version> </dependency> -->
 
 	</dependencies>
 	<build>
@@ -294,7 +302,8 @@
 			</activation>
 			<properties>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-				<jdbc.url>jdbc:mysql://localhost:3306/jbpm?useUnicode=true<![CDATA[&amp;]]>characterEncoding=utf8</jdbc.url>
+				<jdbc.url>jdbc:mysql://localhost:3306/jbpm?useUnicode=true<![CDATA[&amp;]]>characterEncoding=utf8
+				</jdbc.url>
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>root</jdbc.password>
 			</properties>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import test.jbpm.api.MesUser;
 import test.jbpm.api.Person;
 import test.jbpm.dao.IUserDao;
 
@@ -40,8 +41,13 @@ public class UserDaoImpl implements IUserDao {
      */
 	@Override
     @SuppressWarnings("unchecked")
-    public <T> T  get(Serializable id, Class<T> clazz) {
-        return (T) sessionFactory.getCurrentSession().get(clazz, id);
+    public MesUser  getUserByUserId(Serializable userId) {
+		Session session = sessionFactory.getCurrentSession();
+		List<MesUser> list = session.createQuery("from MesUser where USERID_= '"+userId+"'").list();
+		if(!CollectionUtils.isEmpty(list)){
+			return list.get(0);
+		}
+        return null;
     }
     
     /**
@@ -57,23 +63,6 @@ public class UserDaoImpl implements IUserDao {
         return sessionFactory.getCurrentSession().createQuery(clazz.toString()).list();
     }
     
-    /**
-     * @discription 删除数据
-     * @param id
-     * @param clazz
-     * @author admin-gxf       
-     * @created 2017年12月29日 下午3:43:55
-     */
-	@Override
-    public <T> void delete(Serializable id, Class<T> clazz) {
-        T t = get(id, clazz);
-        if (t != null){
-        	 sessionFactory.getCurrentSession().delete(t);
-        }
-        else{
-        	 new RuntimeException("你要删除的数据不存在").printStackTrace();
-        }
-    }
     
     /**
      * @discription 保存数据

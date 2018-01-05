@@ -51,7 +51,7 @@
 		<property name="dataSource" ref="hibernateData"></property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>  <!--指定数据库方言-->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>  <!--指定数据库方言-->
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop> <!--hibernate根据实体自动生成数据库表-->
 				<!-- <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop> -->
@@ -69,7 +69,7 @@
                 <value>jbpm.execution.hbm.xml</value>  
                 <value>jbpm.history.hbm.xml</value>  
                 <value>jbpm.task.hbm.xml</value>  
-                <value>jbpm.identity.hbm.xml</value>
+                <!-- <value>jbpm.identity.hbm.xml</value> -->
 			</list>
 		</property>
 	</bean>
@@ -101,5 +101,6 @@
 		<property name="jbpmCfg" value="jbpm.cfg.xml"></property>
 	</bean>
 	
-	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+	<bean id="springProcessEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+	
 </beans>

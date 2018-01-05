@@ -13,20 +13,26 @@ package org.jbpm.pvm.internal.lob;
  */
 import java.sql.SQLException;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jbpm.api.JbpmException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BlobStrategyBlob implements BlobStrategy {
-
-	@Autowired
-	private SessionFactory sessionFactory;
 
 	public void set(byte[] bytes, Lob lob) {
 		if (bytes != null) {
 			lob.cachedBytes = bytes;
 			// lob.blob = Hibernate.createBlob(bytes); --源码(hinernate3)--seven
-			lob.blob = sessionFactory.getCurrentSession().getLobHelper().createBlob(bytes);
+//			lob.blob = sessionFactory.getCurrentSession().getLobHelper().createBlob(bytes);
+			ApplicationContext factory = new ClassPathXmlApplicationContext("applicationContext.xml"); 
+            SessionFactory sessionFactory = (SessionFactory)factory.getBean("sessionFactory");  
+            Session session = sessionFactory.openSession();  
+            lob.blob = session.getLobHelper().createBlob(bytes);  
+            session.close();
+			
 		}
 	}
 

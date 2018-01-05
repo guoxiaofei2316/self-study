@@ -8,8 +8,10 @@
   <import resource="jbpm.tx.spring.cfg.xml" />
   <import resource="jbpm.jpdl.cfg.xml" />
   <import resource="jbpm.bpmn.cfg.xml" />
-  <import resource="jbpm.identity.cfg.xml" />
-
+  <!-- <import resource="jbpm.identity.cfg.xml" /> -->
+  <transaction-context>
+     <object class="test.jbpm.service.impl.MesIdentitySessionImpl"/>       
+  </transaction-context>      
   <!-- Job executor is excluded for running the example test cases. -->
   <!-- To enable timers and messages in production use, this should be included. -->
   <!--

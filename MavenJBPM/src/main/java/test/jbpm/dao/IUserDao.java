@@ -3,10 +3,12 @@ package test.jbpm.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import test.jbpm.api.MesUser;
+
 
 public interface IUserDao {
 	
-	<T> T  get(Serializable id, Class<T> clazz);
+	MesUser getUserByUserId(Serializable id);
 
 	<T> void update(T t);
 	
@@ -14,6 +16,4 @@ public interface IUserDao {
 	
 	 <T> void save(T t);
 	
-	 
-	 <T> void delete(Serializable id, Class<T> clazz);
 }
